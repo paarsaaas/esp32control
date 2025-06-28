@@ -41,18 +41,17 @@
       position: relative;
     }
 #logo {
+  position: absolute;
+  top: 10px;          /* 10 پیکسل از بالای صفحه */
+  left: 50%;          /* وسط صفحه */
+  transform: translateX(-50%);
   width: 140px;
   height: auto;
-  margin-bottom: 1rem;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
   filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+  z-index: 1100;      /* بالاتر از دکمه‌ها */
   background: transparent;
   border: none;
   padding: 0;
-  position: relative; /* یا absolute اگر لازم شد */
-  z-index: 1100;      /* بیشتر از دکمه‌ها */
 }
 
 
