@@ -39,23 +39,66 @@
       text-align: center;
       padding: 2rem 1rem 1rem;
       position: relative;
-    }
-#logo {
-  width: auto;      /* اندازه عرض اصلی */
-  height: 90px;     /* یا ارتفاع دلخواه ثابت */
-  object-fit: contain;
-  cursor: pointer;
-  display: block;
+    }.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  gap: 15px;
+  background: transparent; /* اگر لازم باشه */
 }
 
+/* لوگو */
+#logo {
+  height: 90px;
+  width: auto;
+  flex-shrink: 0;
+  cursor: pointer;
+}
 
+/* متن کنار لوگو */
+.header-text {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 15px;
+  color: var(--text-light);
+}
 
+.header-text h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
 
+.header-text p {
+  margin: 0;
+  font-size: 1rem;
+  opacity: 0.8;
+}
 
+/* دکمه‌ها و انتخاب زبان در یک ردیف کنار هم */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-
-
-
+/* بقیه استایل های دکمه و سلکتور که داری رو حفظ کن */
+.theme-toggle, .auth-toggle, .language-select, .menu-toggle {
+  position: static; /* حذف absolute */
+  background: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 1001;
+}
+.menu-toggle {
+  font-size: 1.2rem;
+  padding: 0.4rem 0.8rem;
+}
 
     .theme-toggle, .auth-toggle, .language-select {
       position: absolute;
