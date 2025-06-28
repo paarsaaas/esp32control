@@ -164,10 +164,9 @@
 </head>
 <body class="light">
 
-  <header>
-<img id="logo" src="logo.png" alt="لوگو پروژه" />
-    <h1>خانه هوشمند با ESP32</h1>
-    <p>مدیریت هوشمند وسایل خانه با اتصال وای‌فای</p>
+<header>
+  <div class="top-bar">
+    <img id="logo" src="logo.png" alt="لوگو پروژه" />
     <button class="theme-toggle" id="themeBtn">🌙</button>
     <button class="auth-toggle" onclick="showLogin()">🔐</button>
     <select class="language-select">
@@ -175,7 +174,11 @@
       <option value="en">English</option>
     </select>
     <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">☰</button>
-  </header>
+  </div>
+  <h1>خانه هوشمند با ESP32</h1>
+  <p>مدیریت هوشمند وسایل خانه با اتصال وای‌فای</p>
+</header>
+
 
   <div class="menu" id="menu">
     <a href="#" onclick="openCart()">🛒 سبد خرید</a>
