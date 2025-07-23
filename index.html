@@ -138,14 +138,16 @@
       min-height: 60vh;
     }
 
-  .content-box:empty {
-  display: none;
-}
+    .content-box {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 1rem;
+      backdrop-filter: blur(6px);
+    }
 
-    body.dark ..content-box:empty {
-  display: none;
-}
-
+    body.dark .content-box {
+      background: rgba(0, 0, 0, 0.3);
+    }
 
     footer {
       text-align: center;
@@ -217,15 +219,14 @@
       menu.classList.toggle("open");
     }
 
-  function loadContent(type) {
-  menu.classList.remove("open");
-  if (type === 'about') {
-    content.innerHTML = `<h2>درباره پروژه</h2><p>پروژه خانه هوشمند پارسیان شامل کنترل وسایل برقی، مشاهده دما، مصرف برق و تنظیمات از طریق موبایل می‌باشد.</p>`;
-  } else if (type === 'contact') {
-    content.innerHTML = `<h2>ارتباط با ما</h2><p>📧 <a href="mailto:parsasoorme138700@gmail.com">parsasoorme138700@gmail.com</a></p>`;
-  }
-  content.style.display = "block"; // مطمئن میشه باکس نمایش داده میشه
-}
+    function loadContent(type) {
+      menu.classList.remove("open");
+      if (type === 'about') {
+        content.innerHTML = `<h2>درباره پروژه</h2><p>پروژه خانه هوشمند پارسیان شامل کنترل وسایل برقی، مشاهده دما، مصرف برق و تنظیمات از طریق موبایل می‌باشد.</p>`;
+      } else if (type === 'contact') {
+        content.innerHTML = `<h2>ارتباط با ما</h2><p>📧 <a href="mailto:parsasoorme138700@gmail.com">parsasoorme138700@gmail.com</a></p>`;
+      }
+    }
 
     function openCart() {
       if (!userLogged) {
