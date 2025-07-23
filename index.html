@@ -181,7 +181,7 @@ body {
     <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">☰</button>
   </header>
 
-  <div class="menu" id="menu">
+ <a href="#" onclick="loadContent('home')">🏠 صفحه اصلی</a>
     <a href="#" onclick="openCart()">🛒 سبد خرید</a>
     <a href="http://192.168.4.1" target="_blank">ورود به سایت</a>
     <a href="#" onclick="loadContent('about')">اطلاعات پروژه</a>
@@ -228,15 +228,20 @@ body {
       menu.classList.toggle("open");
     }
 
-    function loadContent(type) {
-      menu.classList.remove("open");
-      if (type === 'about') {
-        content.innerHTML = `<h2>درباره پروژه</h2><p>پروژه خانه هوشمند پارسیان شامل کنترل وسایل برقی، مشاهده دما، مصرف برق و تنظیمات از طریق موبایل می‌باشد.</p>`;
-      } else if (type === 'contact') {
-        content.innerHTML = `<h2>ارتباط با ما</h2><p>📧 <a href="mailto:parsasoorme138700@gmail.com">parsasoorme138700@gmail.com</a></p>`;
-      }
-    }
+   function loadContent(type) {
+  menu.classList.remove("open");
 
+  if (type === 'home') {
+    content.innerHTML = ""; // پاک‌کردن محتوا
+    return;
+  }
+
+  if (type === 'about') {
+    content.innerHTML = `<h2>درباره پروژه</h2><p>پروژه خانه هوشمند پارسیان شامل کنترل وسایل برقی، مشاهده دما، مصرف برق و تنظیمات از طریق موبایل می‌باشد.</p>`;
+  } else if (type === 'contact') {
+    content.innerHTML = `<h2>ارتباط با ما</h2><p>📧 <a href="mailto:parsasoorme138700@gmail.com">parsasoorme138700@gmail.com</a></p>`;
+  }
+}
     function openCart() {
       if (!userLogged) {
         alert("ابتدا وارد یا ثبت‌نام کنید");
