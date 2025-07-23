@@ -254,10 +254,11 @@
         userLogged = true;
         currentUser = newUser;
         alert("خوش آمدی " + name);// پخش صدای خوش‌آمدگویی
-        const audio = document.getElementById("welcome");
-        audio.play().catch(() => {
-        console.warn("پخش صدا با خطا مواجه شد یا اجازه داده نشد.");
-        });   
+        
+      const audio = document.getElementById("welcome");  // اینجا اصلاح شد
+    audio.play().catch(() => {
+      console.warn("پخش صدا با خطا مواجه شد یا اجازه داده نشد.");
+    });
         document.getElementById("menu").style.display = "block";
         menuToggle.style.display = "inline-block";
         if (name.toLowerCase() === "parsa" && email.toLowerCase() === "parsasoorme138700@gmail.com") {
