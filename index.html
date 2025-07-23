@@ -138,16 +138,14 @@
       min-height: 60vh;
     }
 
-    .content-box {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      padding: 1rem;
-      backdrop-filter: blur(6px);
-    }
+  .content-box:empty {
+  display: none;
+}
 
-    body.dark .content-box {
-      background: rgba(0, 0, 0, 0.3);
-    }
+    body.dark ..content-box:empty {
+  display: none;
+}
+
 
     footer {
       text-align: center;
