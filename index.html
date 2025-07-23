@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>خانه هوشمند با ESP32</title>
+  <style>
+    :root {
+      --text-light: #222;
+      --text-dark: #fff;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Tahoma", sans-serif;
+      overflow-x: hidden;
+      transition: background 0.6s, color 0.6s;
+    }
+
+    body.light {
+      background: linear-gradient(-45deg, #ffe4e1, #f9f871, #d2f8ff, #ffd1ff);
+      background-size: 400% 400%;
+      color: var(--text-light);
+      animation: gradient 15s ease infinite;
+    }
+
+    body.dark {
+      background: radial-gradient(circle, #0f2027, #203a43, #2c5364);
+      color: var(--text-dark);
+    }
+
+    @keyframes gradient {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+      position: relative;
+    }
+ #logo {
+  width: 140px;
+  height: auto;
+  margin-bottom: 1rem;
+  padding: 10px;
+ background: transparent;
+}
+  
+
+    .theme-toggle, .auth-toggle, .language-select {
+      position: absolute;
+      top: 10px;
+      background: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 0.4rem 0.6rem;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 1001;
+    }
+    .theme-toggle { left: 10px; }
+    .auth-toggle { left: 60px; }
+    .language-select {
+      right: 60px;
+      font-family: inherit;
+    }
+
+    .menu-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 0.4rem 0.8rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 1001;
+      display: none;
+    }
+
+    .menu {
+      position: fixed;
+      top: 0;
+      right: -260px;
+      width: 240px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.0);
+      backdrop-filter: blur(10px);
+      box-shadow: -4px 0 10px rgba(0,0,0,0.3);
+      transition: right 0.3s ease;
+      padding-top: 5rem;
+      z-index: 1000;
+      display: none;
+    }
+
+    body.dark .menu {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .menu.open {
+      right: 0;
+    }
+
+    .menu a {
+      display: block;
+      padding: 1rem;
+      color: inherit;
+      text-decoration: none;
+      font-weight: bold;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: background 0.3s;
+    }
+
+    .menu a:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .cart-box {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #fff;
+      color: #000;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      z-index: 2000;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+      min-height: 60vh;
+    }
+
+    .content-box {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 1rem;
+      backdrop-filter: blur(6px);
+    }
+
+    body.dark .content-box {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: inherit;
+    }
+  </style>
+</head>
+<body class="light">
+
+  <header>
+<img id="logo" src="logo.png" alt="لوگو پروژه" />
+    <h1>کیت هوشمند سازی پارسیان</h1>
+    <p> مدیریت هوشمند وسایل خانه </p>
+    <button class="theme-toggle" id="themeBtn">🌙</button>
+    <button class="auth-toggle" onclick="showLogin()">🔐</button>
+    <select class="language-select">
+      <option value="fa">فارسی</option>
+      <option value="en">English</option>
+    </select>
+    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">☰</button>
+  </header>
+
+  <div class="menu" id="menu">
+    <a href="#" onclick="openCart()">🛒 سبد خرید</a>
+    <a href="http://192.168.4.1" target="_blank">ورود به سایت</a>
+    <a href="#" onclick="loadContent('about')">اطلاعات پروژه</a>
+    <a href="#" onclick="loadContent('contact')">ارتباط با ما</a>
+    <a href="#" id="log-list" style="display:none" onclick="showUsers()"> مشاهده کاربران </a>
+  </div>
+
+  <div class="cart-box" id="cart">
+    برای خرید به <b>ticketsuupporting@gmail.com</b> پیام دهید.
+  </div>
+
+  <main>
+    <div class="content-box" id="content">
+    </div>
+  </main>
+
+  <footer>
+    Created by PJA| 2025
+  </footer>
+   <audio id="welcome" src="welcome.mp3" preload="auto"></audio>
+  <script>
+    const body = document.body;
+    const themeBtn = document.getElementById("themeBtn");
+    const menu = document.getElementById("menu");
+    const content = document.getElementById("content");
+    const cart = document.getElementById("cart");
+    const logList = document.getElementById("log-list");
+    const menuToggle = document.getElementById("menuToggle");
+
+    let userLogged = false;
+    let currentUser = null;
+
+    themeBtn.onclick = () => {
+      body.classList.toggle("dark");
+      body.classList.toggle("light");
+      themeBtn.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
+    };
+
+    function toggleMenu() {
+      if (!userLogged) {
+        alert("ابتدا وارد یا ثبت‌نام کنید");
+        return;
+      }
+      menu.classList.toggle("open");
+    }
+
+    function loadContent(type) {
+      menu.classList.remove("open");
+      if (type === 'about') {
+        content.innerHTML = `<h2>درباره پروژه</h2><p>پروژه خانه هوشمند پارسیان شامل کنترل وسایل برقی، مشاهده دما، مصرف برق و تنظیمات از طریق موبایل می‌باشد.</p>`;
+      } else if (type === 'contact') {
+        content.innerHTML = `<h2>ارتباط با ما</h2><p>📧 <a href="mailto:parsasoorme138700@gmail.com">parsasoorme138700@gmail.com</a></p>`;
+      }
+    }
+
+    function openCart() {
+      if (!userLogged) {
+        alert("ابتدا وارد یا ثبت‌نام کنید");
+        return;
+      }
+      cart.classList.toggle("show");
+    }
+
+    function showLogin() {
+      const name = prompt("نام خود را وارد کنید:");
+      const email = prompt("ایمیل خود را وارد کنید:");
+      if (name && email) {
+        const time = new Date().toLocaleString("fa-IR");
+        const newUser = { name, email, time };
+        let users = JSON.parse(localStorage.getItem("users") || "[]");
+        users.push(newUser);
+        localStorage.setItem("users", JSON.stringify(users));
+        localStorage.setItem("user", JSON.stringify(newUser));
+        userLogged = true;
+        currentUser = newUser;
+        alert("خوش آمدی " + name);// پخش صدای خوش‌آمدگویی
+        
+      const audio = document.getElementById("welcome");  // اینجا اصلاح شد
+    audio.play().catch(() => {
+      console.warn("پخش صدا با خطا مواجه شد یا اجازه داده نشد.");
+    });
+        document.getElementById("menu").style.display = "block";
+        menuToggle.style.display = "inline-block";
+        if (name.toLowerCase() === "parsa" && email.toLowerCase() === "parsasoorme138700@gmail.com") {
+          logList.style.display = "block";
+        } else {
+          logList.style.display = "none";
+        }
+      }
+    }
+
+    function showUsers() {
+      if (!(currentUser && currentUser.name.toLowerCase() === "parsa" && currentUser.email.toLowerCase() === "parsasoorme138700@gmail.com")) return;
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      if (users.length === 0) {
+        content.innerHTML = "<p>هیچ کاربری هنوز ثبت‌نام نکرده است.</p>";
+        return;
+      }
+      let html = '<h2>لیست کاربران وارد شده:</h2><ul>';
+      users.forEach(u => {
+        html += `<li>${u.name} - ${u.email} - ${u.time}</li>`;
+      });
+      html += '</ul>';
+      content.innerHTML = html;
+    }
+
+    window.onload = () => {
+      const saved = localStorage.getItem("user");
+      if (saved) {
+        const user = JSON.parse(saved);
+        userLogged = true;
+        currentUser = user;
+        document.getElementById("menu").style.display = "block";
+        menuToggle.style.display = "inline-block";
+        if (user.name.toLowerCase() === "parsa" && user.email.toLowerCase() === "parsasoorme138700@gmail.com") {
+          logList.style.display = "block";
+        } else {
+          logList.style.display = "none";
+        }
+      }
+    };
+  </script>
+</body>
+</html>
