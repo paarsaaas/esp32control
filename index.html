@@ -306,23 +306,6 @@ body {
     }
 
   
-<script>
-  function isEnglishText(text) {
-    return /^[\x00-\x7F\s.,'"!?()\-:;]+$/.test(text.trim());
-  }
-
-  function applyEnglishFont() {
-    const elements = document.querySelectorAll("body *:not(script):not(style)");
-
-    elements.forEach(el => {
-      if (el.children.length === 0 && isEnglishText(el.textContent)) {
-        el.classList.add("english-text");
-      }
-    });
-  }
-
-  document.addEventListener("DOMContentLoaded", applyEnglishFont);
-</script>
 
 
     window.onload = () => {
