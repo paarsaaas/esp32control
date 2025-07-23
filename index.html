@@ -306,6 +306,7 @@ body {
     }
 
   
+<script>
   function isEnglishText(text) {
     return /^[\x00-\x7F\s.,'"!?()\-:;]+$/.test(text.trim());
   }
@@ -322,6 +323,7 @@ body {
 
   document.addEventListener("DOMContentLoaded", applyEnglishFont);
 </script>
+
 
     window.onload = () => {
       const saved = localStorage.getItem("user");
