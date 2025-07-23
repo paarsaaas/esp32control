@@ -57,6 +57,21 @@ body {
   font-family: 'tabriz', Tahoma, sans-serif;
 }
 
+<style>
+@font-face {
+  font-family: 'MyEnglishFont';
+  src: url('./fonts/en.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.english-text {
+  font-family: 'MyEnglishFont', sans-serif !important;
+  direction: ltr;
+  text-align: left;
+}
+</style>
+
 
     .theme-toggle, .auth-toggle, .language-select {
       position: absolute;
@@ -289,6 +304,24 @@ body {
       html += '</ul>';
       content.innerHTML = html;
     }
+
+     <script>
+  function isEnglishText(text) {
+    return /^[\x00-\x7F\s.,'"!?()\-:;]+$/.test(text.trim());
+  }
+
+  function applyEnglishFont() {
+    const elements = document.querySelectorAll("body *:not(script):not(style)");
+
+    elements.forEach(el => {
+      if (el.children.length === 0 && isEnglishText(el.textContent)) {
+        el.classList.add("english-text");
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", applyEnglishFont);
+</script>
 
     window.onload = () => {
       const saved = localStorage.getItem("user");
